@@ -1,3 +1,4 @@
+package ru.g4.protocols.ce102;
 import java.nio.ByteBuffer;
 
 import ru.g4.utils.HEXUtils;

@@ -1,3 +1,4 @@
+package ru.g4.protocols.ce102;
 public enum ClassAccessEnum {
 	Request(0x05), AccessError(0x07);
 

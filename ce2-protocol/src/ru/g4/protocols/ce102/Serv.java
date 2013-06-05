@@ -1,3 +1,4 @@
+package ru.g4.protocols.ce102;
 public class Serv {
 	public static final int DIRECTION_REQ = 0x80;
 	public static final int DIRECTION_RESP = 0x00;

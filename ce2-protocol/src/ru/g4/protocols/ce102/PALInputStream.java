@@ -1,3 +1,4 @@
+package ru.g4.protocols.ce102;
 import java.io.EOFException;
 import java.io.FilterInputStream;
 import java.io.IOException;

@@ -1,5 +1,8 @@
+package ru.g4.protocols.ce102.facade;
 import java.io.IOException;
 import java.util.Date;
+
+import ru.g4.protocols.ce102.AccessException;
 
 
 public interface Ce102 {

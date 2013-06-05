@@ -1,3 +1,4 @@
+package ru.g4.protocols.ce102;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;

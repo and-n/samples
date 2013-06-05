@@ -1,3 +1,4 @@
+package ru.g4.protocols.ce102;
 public enum CommandEnum {
 	ReadDateTime(0x0120),
 	WriteDateTime(0x0121),

@@ -1,3 +1,4 @@
+package ru.g4.protocols.ce102;
 
 public class AccessException extends Exception {
 

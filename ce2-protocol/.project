@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>doc/ce102_opОт2013.pdf</name>
+			<type>1</type>
+			<location>/media/qw3rtrun/TRANSCEND/ce102_opОт2013.pdf</location>
+		</link>
+	</linkedResources>
 </projectDescription>

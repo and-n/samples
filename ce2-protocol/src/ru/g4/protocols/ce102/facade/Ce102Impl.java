@@ -3,6 +3,7 @@ package ru.g4.protocols.ce102.facade;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -122,43 +123,87 @@ public class Ce102Impl implements Ce102 {
 		dout.writeBCD(c.get(Calendar.YEAR)-2000);
 		requestPal(CommandEnum.WriteDateTime, bout.toByteArray());
 	}
-
-	@Override
-	public double getPower() throws IOException, AccessException {
-		// TODO Auto-generated method stub
-		return 0;
+	
+	public double getFloatPointKoef()
+	{
+		return new BigDecimal(1).scaleByPowerOfTen(-1*((int)getConfig() & 0x03)).doubleValue();
 	}
 
+	@SuppressWarnings("resource")
+	@Override
+	public double getPower() throws IOException, AccessException, InterruptedException {
+		byte[] buf = requestPal(CommandEnum.ReadPower, new byte[] {});
+		DataTypesInputStream din = new DataTypesInputStream(new ByteArrayInputStream(buf));
+		return din.readData3()*getFloatPointKoef();
+	}
+
+	@SuppressWarnings("resource")
 	@Override
 	public double getTariffValue(int tariff, int depth) throws IOException,
-			AccessException {
-		// TODO Auto-generated method stub
-		return 0;
+			AccessException, InterruptedException {
+		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		DataTypesOutputStream dout = new DataTypesOutputStream(bout);
+		dout.writeUINT8(tariff);
+		dout.writeUINT8(depth);
+		byte[] buf = requestPal(CommandEnum.ReadTariffValue, bout.toByteArray());
+		ByteArrayInputStream bin = new ByteArrayInputStream(buf);
+		DataTypesInputStream din = new DataTypesInputStream(bin);
+		return din.readData4()*getFloatPointKoef();
 	}
 
+	@SuppressWarnings("resource")
 	@Override
-	public double getTariffSumm(int depth) throws IOException, AccessException {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getTariffSumm(int depth) throws IOException, AccessException, InterruptedException {
+		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		DataTypesOutputStream dout = new DataTypesOutputStream(bout);
+		dout.writeUINT8(depth);
+		byte[] buf = requestPal(CommandEnum.ReadTariffSum, bout.toByteArray());
+		ByteArrayInputStream bin = new ByteArrayInputStream(buf);
+		DataTypesInputStream din = new DataTypesInputStream(bin);
+		return din.readData4()*getFloatPointKoef();
 	}
 
+	@SuppressWarnings("resource")
 	@Override
-	public double getIntervalValue(Date date) throws IOException,
-			AccessException {
-		// TODO Auto-generated method stub
-		return 0;
+	public double[] getIntervalValue(Date date, int num, int count) throws IOException,
+			AccessException, InterruptedException {
+		if (count < 1 || count > 4)
+				throw new IllegalArgumentException("count("+count+") must be in [1, 4]");
+		Calendar c = Calendar.getInstance(getTimeZone());
+		c.setTime(date);
+		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		DataTypesOutputStream dout = new DataTypesOutputStream(bout);
+		dout.writeBCD(c.get(Calendar.DAY_OF_MONTH));
+		dout.writeBCD(c.get(Calendar.MONTH));
+		dout.writeBCD(c.get(Calendar.YEAR)-2000);
+		dout.writeBCD(num);
+		dout.writeBCD(count);
+		byte[] buf = requestPal(CommandEnum.ReadIntervalEnergy, bout.toByteArray());
+		ByteArrayInputStream bin = new ByteArrayInputStream(buf);
+		DataTypesInputStream din = new DataTypesInputStream(bin);
+		double[] doubles = new double[count];
+		for (int i = 0; i < count; i++)
+			doubles[i] = din.readData3()*getFloatPointKoef();
+		return doubles;
 	}
 
+	@SuppressWarnings("resource")
 	@Override
-	public double getPowerLimit() throws IOException, AccessException {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getPowerLimit() throws IOException, AccessException, InterruptedException {
+		byte[] buf = requestPal(CommandEnum.ReadLimPwrN, new byte[0]);
+		ByteArrayInputStream bin = new ByteArrayInputStream(buf);
+		DataTypesInputStream din = new DataTypesInputStream(bin);
+		return din.readData3()*getFloatPointKoef();
 	}
 
+	@SuppressWarnings("resource")
 	@Override
-	public void setPowerLimit() throws IOException, AccessException {
-		// TODO Auto-generated method stub
-
+	public void setPowerLimit(double limit) throws IOException, AccessException, InterruptedException {
+		int val= new Double(limit/getFloatPointKoef()).intValue();
+		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		DataTypesOutputStream dout = new DataTypesOutputStream(bout);
+		dout.writeData3(val);
+		requestPal(CommandEnum.WriteLimPwrN, bout.toByteArray());
 	}
 
 	protected byte[] requestPal(CommandEnum cmd, byte[] data) throws IOException, AccessException, InterruptedException

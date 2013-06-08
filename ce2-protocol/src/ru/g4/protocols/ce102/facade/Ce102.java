@@ -10,10 +10,10 @@ public interface Ce102 {
 	public long getConfig();
 	public Date getDateTime() throws IOException, AccessException, InterruptedException;
 	public void setDateTime(Date date) throws IOException, AccessException, InterruptedException;
-	public double getPower() throws IOException, AccessException;
-	public double getTariffValue(int tariff, int depth) throws IOException, AccessException;
-	public double getTariffSumm(int depth) throws IOException, AccessException;
-	public double getIntervalValue(Date date) throws IOException, AccessException;
-	public double getPowerLimit() throws IOException, AccessException;
-	public void setPowerLimit() throws IOException, AccessException;
+	public double getPower() throws IOException, AccessException, InterruptedException;
+	public double getTariffValue(int tariff, int depth) throws IOException, AccessException, InterruptedException;
+	public double getTariffSumm(int depth) throws IOException, AccessException, InterruptedException;
+	public double[] getIntervalValue(Date date, int num, int count) throws IOException, AccessException, InterruptedException;
+	public double getPowerLimit() throws IOException, AccessException, InterruptedException;
+	public void setPowerLimit(double limit) throws IOException, AccessException, InterruptedException;
 }

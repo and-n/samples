@@ -6,10 +6,10 @@ import ru.g4.protocols.ce102.AccessException;
 
 
 public interface Ce102 {
-	public void init() throws IOException, AccessException;
+	public long init() throws IOException, AccessException, InterruptedException;
 	public long getConfig();
-	public Date getDateTime();
-	public void setDateTime(Date date) throws IOException, AccessException;
+	public Date getDateTime() throws IOException, AccessException, InterruptedException;
+	public void setDateTime(Date date) throws IOException, AccessException, InterruptedException;
 	public double getPower() throws IOException, AccessException;
 	public double getTariffValue(int tariff, int depth) throws IOException, AccessException;
 	public double getTariffSumm(int depth) throws IOException, AccessException;

@@ -2,7 +2,7 @@ package ru.g4.protocols.ce102;
 public enum CommandEnum {
 	ReadDateTime(0x0120),
 	WriteDateTime(0x0121),
-	Read–°onfig(0x0101),
+	Read–Config(0x0101),
 	ReadTariffValue(0x0130),
 	ReadTariffSum(0x0131),
 	ReadPower(0x0132),

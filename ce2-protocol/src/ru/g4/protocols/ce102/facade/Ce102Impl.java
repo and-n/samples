@@ -91,6 +91,20 @@ public class Ce102Impl implements Ce102 {
 	public long getConfig() {
 		return config;
 	}
+	
+	@Override
+	public long getIntervalLength() {
+	    switch ((int)(getConfig()>>8) & 0x03) {
+	    case 0:
+		return 60*60*1000;
+	    case 1:
+		return 30*60*1000;
+	    case 2:
+		return 15*60*1000;
+	    default:
+		return -1;
+	    }
+	}
 
 	@SuppressWarnings("resource")
 	@Override

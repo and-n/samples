@@ -8,6 +8,7 @@ import ru.g4.protocols.ce102.AccessException;
 public interface Ce102 {
 	public long init() throws IOException, AccessException, InterruptedException;
 	public long getConfig();
+	public long getIntervalLength();
 	public Date getDateTime() throws IOException, AccessException, InterruptedException;
 	public void setDateTime(Date date) throws IOException, AccessException, InterruptedException;
 	public double getPower() throws IOException, AccessException, InterruptedException;

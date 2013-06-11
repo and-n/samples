@@ -215,5 +215,11 @@ public class Ce102ImplTest {
 		public void setPowerLimit(double limit) throws IOException,
 				AccessException, InterruptedException {
 		}
+
+		@Override
+		public long getIntervalLength() {
+		    // TODO Auto-generated method stub
+		    return 0;
+		}
 	}
 }

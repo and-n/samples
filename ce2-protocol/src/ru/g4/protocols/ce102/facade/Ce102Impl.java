@@ -81,7 +81,7 @@ public class Ce102Impl implements Ce102 {
 	
 	@Override
 	public long init() throws IOException, AccessException, InterruptedException {
-		byte[] buf = requestPal(CommandEnum.Read–Config, new byte[] {});
+		byte[] buf = requestPal(CommandEnum.ReadConfig, new byte[] {});
 		buf = Arrays.copyOf(buf, 8);
 		this.config = HEXUtils.longFromBytesLH(buf);
 		return this.config;

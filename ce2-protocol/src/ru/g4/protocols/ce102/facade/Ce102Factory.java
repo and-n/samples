@@ -25,7 +25,7 @@ public class Ce102Factory {
 		this.timeout = timeout;
 	}
 
-	public Ce102 getCE102(final ChannelParameters<?> params, final int address, final String password) 
+	public Ce102 getCE102(final ChannelParameters<?> params, final int address, final byte[] password) 
 	{
 		return new Ce102Impl(params, address, password, tz, timeout);
 	}

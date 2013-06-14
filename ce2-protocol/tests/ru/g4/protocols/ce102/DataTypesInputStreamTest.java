@@ -42,20 +42,20 @@ public class DataTypesInputStreamTest {
      * Test of readUINT8 method, of class DataTypesInputStream.
      */
     @Test
+    @SuppressWarnings("resource")
     public void testReadUINT8() throws Exception {
         System.out.println("readUINT8");
-        DataTypesInputStream instance = new DataTypesInputStream(new ByteArrayInputStream(new byte[]{-2}));
+	DataTypesInputStream instance = new DataTypesInputStream(new ByteArrayInputStream(new byte[]{-2}));
         int expResult = 254;
         int result = instance.readUINT8();
         assertEquals(expResult, result);
-        
-        
     }
 
     /**
      * Test of readUINT16 method, of class DataTypesInputStream.
      */
     @Test
+    @SuppressWarnings("resource")
     public void testReadUINT16() throws Exception {
         System.out.println("readUINT16");
         DataTypesInputStream instance = new DataTypesInputStream(new ByteArrayInputStream(new byte[]{0,1}));
@@ -69,6 +69,7 @@ public class DataTypesInputStreamTest {
      * Test of readUINT32 method, of class DataTypesInputStream.
      */
     @Test
+    @SuppressWarnings("resource")
     public void testReadUINT32() throws Exception {
         System.out.println("readUINT32");
         DataTypesInputStream instance = new DataTypesInputStream(new ByteArrayInputStream(new byte[]{-1,-1,-1,-1}));
@@ -81,6 +82,7 @@ public class DataTypesInputStreamTest {
      * Test of readStrWithOffset method, of class DataTypesInputStream.
      */
     @Test
+    @SuppressWarnings("resource")
     public void testReadStrWithOffset() throws Exception {
         System.out.println("readStrWithOffset");
         char[] m = new char[3];
@@ -94,6 +96,7 @@ public class DataTypesInputStreamTest {
      * Test of readStrN method, of class DataTypesInputStream.
      */
     @Test
+    @SuppressWarnings("resource")
     public void testReadStrN() throws Exception {
   System.out.println("readStrWithOffset");
         char[] m = new char[3];
@@ -107,6 +110,7 @@ public class DataTypesInputStreamTest {
      * Test of readBCD method, of class DataTypesInputStream.
      */
     @Test
+    @SuppressWarnings("resource")
     public void testReadBCD() throws Exception {
         System.out.println("readBCD");
        DataTypesInputStream instance = new DataTypesInputStream(new ByteArrayInputStream(new byte[]{(byte)0x99}));
@@ -119,6 +123,7 @@ public class DataTypesInputStreamTest {
      * Test of readData2 method, of class DataTypesInputStream.
      */
     @Test
+    @SuppressWarnings("resource")
     public void testReadData2() throws Exception {
          System.out.println("readUINT16");
         DataTypesInputStream instance = new DataTypesInputStream(new ByteArrayInputStream(new byte[]{0,1}));
@@ -132,6 +137,7 @@ public class DataTypesInputStreamTest {
      * Test of readData3 method, of class DataTypesInputStream.
      */
     @Test
+    @SuppressWarnings("resource")
     public void testReadData3() throws Exception {
         System.out.println("readData3");
         DataTypesInputStream instance = new DataTypesInputStream(new ByteArrayInputStream(new byte[]{-1,-1,-1}));
@@ -145,6 +151,7 @@ public class DataTypesInputStreamTest {
      * Test of readData4 method, of class DataTypesInputStream.
      */
     @Test
+    @SuppressWarnings("resource")
     public void testReadData4() throws Exception {
         System.out.println("readUINT32");
         DataTypesInputStream instance = new DataTypesInputStream(new ByteArrayInputStream(new byte[]{-1,-1,-1,-1}));

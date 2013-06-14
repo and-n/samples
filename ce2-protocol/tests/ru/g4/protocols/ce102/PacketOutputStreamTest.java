@@ -32,5 +32,5 @@ public class PacketOutputStreamTest {
 		channelOut.writePacket(packet);
 		Assert.assertArrayEquals(packetAsByte,out.toByteArray());
 	}
-
+	
 }

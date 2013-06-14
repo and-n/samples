@@ -4,16 +4,17 @@ package ru.g4.protocols.ce102;
  * and open the template in the editor.
  */
 
-import java.io.ByteArrayInputStream;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.util.Arrays;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -44,6 +45,7 @@ public class DataTypesOutputStreamTest {
      * Test of writeUINT8 method, of class DataTypesOutputStream.
      */
     @Test
+    @SuppressWarnings("resource")
     public void testWriteUINT8() throws Exception {
         System.out.println("writeUINT8");
         byte[] s = new byte[]{1, -1, -2};
@@ -63,6 +65,7 @@ public class DataTypesOutputStreamTest {
      * Test of writeUINT16 method, of class DataTypesOutputStream.
      */
     @Test
+    @SuppressWarnings("resource")
     public void testWriteUINT16() throws Exception {
         System.out.println("writeUINT16");
         byte[] s = new byte[]{1, 1, -1,-1};
@@ -79,6 +82,7 @@ public class DataTypesOutputStreamTest {
      * Test of writeUINT32 method, of class DataTypesOutputStream.
      */
     @Test
+    @SuppressWarnings("resource")
     public void testWriteUINT32() throws Exception {
         System.out.println("writeUINT16");
         byte[] s = new byte[]{1, 1, -1,-1};
@@ -95,6 +99,7 @@ public class DataTypesOutputStreamTest {
      * Test of writeStrN method, of class DataTypesOutputStream.
      */
     @Test
+    @SuppressWarnings("resource")
     public void testWriteStrN_3args() throws Exception {
         System.out.println("writeStrN");
         char[] m = null;
@@ -110,6 +115,7 @@ public class DataTypesOutputStreamTest {
      * Test of writeStrN method, of class DataTypesOutputStream.
      */
     @Test
+    @SuppressWarnings("resource")
     public void testWriteStrN_charArr() throws Exception {
         System.out.println("writeStrN");
         char[] m = null;
@@ -123,6 +129,7 @@ public class DataTypesOutputStreamTest {
      * Test of writeBCD method, of class DataTypesOutputStream.
      */
     @Test
+    @SuppressWarnings("resource")
     public void testWriteBCD() throws Exception {
         System.out.println("writeBCD");
         int x = 0;
@@ -136,6 +143,7 @@ public class DataTypesOutputStreamTest {
      * Test of writeData3 method, of class DataTypesOutputStream.
      */
     @Test
+    @SuppressWarnings("resource")
     public void testWriteData3() throws Exception {
         System.out.println("writeData3");
         int x = 0;
@@ -149,6 +157,7 @@ public class DataTypesOutputStreamTest {
      * Test of writeData2 method, of class DataTypesOutputStream.
      */
     @Test
+    @SuppressWarnings("resource")
     public void testWriteData2() throws Exception {
         System.out.println("writeData2");
         int x = 0;
@@ -162,6 +171,7 @@ public class DataTypesOutputStreamTest {
      * Test of writeData4 method, of class DataTypesOutputStream.
      */
     @Test
+    @SuppressWarnings("resource")
     public void testWriteData4() throws Exception {
         System.out.println("writeData4");
         int x = 0;

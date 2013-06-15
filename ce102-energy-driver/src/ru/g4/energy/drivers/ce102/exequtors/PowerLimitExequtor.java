@@ -9,19 +9,17 @@ import ru.g4.energy.drivers.util.par.DriverParameter;
 import ru.g4.protocols.ce102.AccessException;
 import ru.g4.protocols.ce102.facade.Ce102;
 
-public class PowerParameterExequtor extends AbstractCurrentParameterExequtor
-{
+public class PowerLimitExequtor extends AbstractCurrentParameterExequtor {
 
-	public PowerParameterExequtor(DriverParameter parameter) {
+	public PowerLimitExequtor(DriverParameter parameter) {
 		super(parameter);
 	}
 
 	@Override
-	protected void exequteRead(Ce102 facade, IRegularResponse response) throws IOException,
-			AccessException,
-			InterruptedException, EParametersException
-	{
-		double value= facade.getPower();
+	protected void exequteRead(Ce102 facade, IRegularResponse response)
+			throws IOException, AccessException, InterruptedException,
+			EParametersException {
+		double value= facade.getPowerLimit();
 		int quality = value==ERROR_CODE ? 0:192;
 		response.sendValue(parameter, value, facade.getDateTime().getTime(), quality);
 	}
@@ -30,8 +28,7 @@ public class PowerParameterExequtor extends AbstractCurrentParameterExequtor
 	protected void exequteWrite(Ce102 facade, IWriteRequest request)
 			throws IOException, AccessException, InterruptedException,
 			EParametersException {
-		throw new UnsupportedOperationException();
-		
+		facade.setPowerLimit( ((Number)request.value()).doubleValue());
 	}
 
 }

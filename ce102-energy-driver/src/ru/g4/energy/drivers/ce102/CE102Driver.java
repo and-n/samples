@@ -9,7 +9,15 @@ import java.util.Map;
 import ru.g4.config.IConfiguration;
 import ru.g4.config.ex.EBuildConfigurationException;
 import ru.g4.config.xml.XMLConfigBuilder;
-import ru.g4.energy.drivers.ce102.exequtors.CurrentParameterExequtor;
+import ru.g4.energy.drivers.ce102.data.AbstractArchiveParameter;
+import ru.g4.energy.drivers.ce102.data.AccoumulateEnergyParameter;
+import ru.g4.energy.drivers.ce102.data.CurrentPowerLimit;
+import ru.g4.energy.drivers.ce102.data.CurrentPowerParameter;
+import ru.g4.energy.drivers.ce102.data.CurrentTarifEnergy;
+import ru.g4.energy.drivers.ce102.data.AbstractCurrentParameter;
+import ru.g4.energy.drivers.ce102.data.CurrentTarifSumParameter;
+import ru.g4.energy.drivers.ce102.data.EnergyForPaymentDateParameter;
+import ru.g4.energy.drivers.ce102.exequtors.AbstractCurrentParameterExequtor;
 import ru.g4.energy.drivers.util.EnergyDriver;
 import ru.g4.energy.drivers.util.exc.EDriverException;
 import ru.g4.energy.drivers.util.msg.IArchiveRequest;
@@ -43,18 +51,21 @@ public class CE102Driver extends EnergyDriver
 		return parametersMap;
 	}
 
-	private CeParameters initParameters()
+	private CeParametersManager initParameters()
 	{
 		XMLConfigBuilder builder = new XMLConfigBuilder();
-		builder.addDescriptor(CeArchiveParameter.class);
-		builder.addDescriptor(CeCurrentParameter.class);
-		builder.addDescriptor(CeCurrentEnergy.class);
+		builder.addDescriptor(CurrentPowerLimit.class);
+		builder.addDescriptor(CurrentPowerParameter.class);
+		builder.addDescriptor(CurrentTarifEnergy.class);
+		builder.addDescriptor(CurrentTarifSumParameter.class);
+		builder.addDescriptor(EnergyForPaymentDateParameter.class);
+		builder.addDescriptor(AccoumulateEnergyParameter.class);
 
 		InputStream resIn = CE102Driver.class.getResourceAsStream("config.xml");
 		try
 		{
 			IConfiguration cfg = builder.buildConfiguration(resIn);
-			CeParameters[] pm = cfg.getObjectsByType(CeParameters.class);
+			CeParametersManager[] pm = cfg.getObjectsByType(CeParametersManager.class);
 			if (pm.length > 0)
 			{
 				return pm[0];
@@ -81,8 +92,22 @@ public class CE102Driver extends EnergyDriver
 	@Override
 	public long onArchive(IArchiveRequest request, IArchiveResponse response) throws EDriverException
 	{
-		
-		return 0;
+		long onMeterTime = onMeterTime(request);
+		Ce102Factory ceFactory = new Ce102Factory(request.meterInfo().timeZone);
+		Ce102 ceFacade =
+				ceFactory.getCE102(request.connectionPort(),
+						request.meterInfo().address,
+						request.meterInfo().password.getBytes());
+		long period = ceFacade.getIntervalLength();
+		if(period==-1){
+			throw new EDriverException("Неизвестный тип периода архивов");
+		}
+		AbstractArchiveParameter[] params = filter(request.parameters(), AbstractArchiveParameter.class);
+		for(AbstractArchiveParameter archiveParam : params)
+		{
+			archiveParam.getExequtor().exequte(request, response, ceFacade);
+		}
+		return onMeterTime;
 	}
 
 	@Override
@@ -92,7 +117,7 @@ public class CE102Driver extends EnergyDriver
 		Ce102 ceFacade =
 				ceFactory.getCE102(request.connectionPort(),
 						request.meterInfo().address,
-						request.meterInfo().password);
+						request.meterInfo().password.getBytes());
 		try
 		{
 			return ceFacade.getDateTime().getTime();
@@ -124,12 +149,12 @@ public class CE102Driver extends EnergyDriver
 		Ce102 ceFacade =
 				ceFactory.getCE102(request.connectionPort(),
 						request.meterInfo().address,
-						request.meterInfo().password);
-		CeCurrentParameter[] requestParameters =
-				filter(request.parameters(), CeCurrentParameter.class);
-		for(CeCurrentParameter parameter:requestParameters)
+						request.meterInfo().password.getBytes());
+		AbstractCurrentParameter[] requestParameters =
+				filter(request.parameters(), AbstractCurrentParameter.class);
+		for(AbstractCurrentParameter parameter:requestParameters)
 		{
-			CurrentParameterExequtor exequtor = parameter.getExequtor();
+			AbstractCurrentParameterExequtor exequtor = parameter.getExequtor();
 			exequtor.exequteRequest(ceFacade, response);
 		}
 		return result;
@@ -142,7 +167,7 @@ public class CE102Driver extends EnergyDriver
 		Ce102 ceFacade =
 				ceFactory.getCE102(request.connectionPort(),
 						request.meterInfo().address,
-						request.meterInfo().password);
+						request.meterInfo().password.getBytes());
 		try
 		{
 			ceFacade.setDateTime(new Date(request.syncTime()));
@@ -170,8 +195,19 @@ public class CE102Driver extends EnergyDriver
 	@Override
 	public long onWriteRequest(IWriteRequest request) throws EDriverException
 	{
+		Ce102Factory ceFactory = new Ce102Factory(request.meterInfo().timeZone);
+		Ce102 ceFacade =
+				ceFactory.getCE102(request.connectionPort(),
+						request.meterInfo().address,
+						request.meterInfo().password.getBytes());
 		
-		return 0;
+		if( request.parameter() instanceof AbstractCurrentParameter)
+		{
+			AbstractCurrentParameter parameter=(AbstractCurrentParameter) request.parameter();
+			AbstractCurrentParameterExequtor exequtor = parameter.getExequtor();
+			exequtor.exequteWriteRequest(ceFacade, request);
+		}
+		return onMeterTime(request);
 	}
 
 }

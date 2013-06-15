@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root>
+	<CeParametersManager>
+		<CurrentPowerLimit number="1" inner="0x0156" writeable="true"/>
+		<CurrentPowerParameter number="2" inner="0x0132"/>
+		<CurrentTarifEnergy number="3" inner="0x130" tarifNumber="0"/>
+		<CurrentTarifEnergy number="4" inner="0x130" tarifNumber="1"/>
+		<CurrentTarifEnergy number="5" inner="0x130" tarifNumber="2"/>
+		<CurrentTarifEnergy number="6" inner="0x130" tarifNumber="3"/>
+		<CurrentTarifEnergy number="7" inner="0x130" tarifNumber="4"/>
+		<CurrentTarifEnergy number="8" inner="0x130" tarifNumber="5"/>
+		<CurrentTarifEnergy number="9" inner="0x130" tarifNumber="6"/>
+		<CurrentTarifEnergy number="10" inner="0x130" tarifNumber="7"/>
+		<CurrentTarifSumParameter number="11" inner="0x131"/>
+		<EnergyForPaymentDateParameter number="12" inner="0x130" tarifNumber="0"/>
+		<EnergyForPaymentDateParameter number="13" inner="0x130" tarifNumber="1"/>
+		<EnergyForPaymentDateParameter number="14" inner="0x130" tarifNumber="2"/>
+		<EnergyForPaymentDateParameter number="15" inner="0x130" tarifNumber="3"/>
+		<EnergyForPaymentDateParameter number="16" inner="0x130" tarifNumber="4"/>
+		<EnergyForPaymentDateParameter number="17" inner="0x130" tarifNumber="5"/>
+		<EnergyForPaymentDateParameter number="18" inner="0x130" tarifNumber="6"/>
+		<EnergyForPaymentDateParameter number="19" inner="0x130" tarifNumber="7"/>
+		<AccoumulateEnergyParameter number="20" inner="0x134"/>
+	</CeParametersManager>
+</Root>

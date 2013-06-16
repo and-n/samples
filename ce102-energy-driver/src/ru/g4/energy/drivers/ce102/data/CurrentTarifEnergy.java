@@ -3,8 +3,14 @@ package ru.g4.energy.drivers.ce102.data;
 import ru.g4.energy.drivers.ce102.exequtors.AbstractCurrentParameterExequtor;
 import ru.g4.energy.drivers.ce102.exequtors.EnergyParameterExequtor;
 
+/**
+ * Класс описатель для текущего параметра расход энергии для тарифа.
+ */
 public class CurrentTarifEnergy extends AbstractCurrentParameter {
 	
+	/**
+	 * Номер тарифа, для которого запрашивается энергия.
+	 */
 	private int tarifNumber;
 
 	public int getTarifNumber() {

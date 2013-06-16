@@ -14,6 +14,10 @@ import ru.g4.energy.drivers.util.msg.IArchiveResponse;
 import ru.g4.protocols.ce102.AccessException;
 import ru.g4.protocols.ce102.facade.Ce102;
 
+/**
+ * Исполнитель запроса архивного значения накопленной энергии. 
+ *
+ */
 public class AccomulateEnergyExequtor extends AbstractArchiveParameterExequtor
 {
 
@@ -21,6 +25,9 @@ public class AccomulateEnergyExequtor extends AbstractArchiveParameterExequtor
 		super(param);
 	}
 
+	/**
+	 * Код ошибочного значения, полученного  с прибора.
+	 */
 	private static final int ERROR_CODE = 0xFF;
 
 	@Override
@@ -67,6 +74,14 @@ public class AccomulateEnergyExequtor extends AbstractArchiveParameterExequtor
 		}
 	}
 
+	/**
+	 * Преобразует параметры запроса в терминах energy-node в параметры в терминах протокола.
+	 * @param request контейнер с параметрами запроса архива.
+	 * @param facade ссылка на фасад протокола.
+	 * @param period период хранения данных в устройстве.
+	 * @return список параметров запроса в терминах устройства.
+	 * @throws EDriverException
+	 */
 	private List<RequestParameters> getRequestParams(IArchiveRequest request,
 			Ce102 facade,
 			long period) throws EDriverException
@@ -106,6 +121,13 @@ public class AccomulateEnergyExequtor extends AbstractArchiveParameterExequtor
 		return result;
 	}
 
+	/**
+	 * Создаёт контейнер с параметрами для одного запроса к устройству.
+	 * @param date дата за которую запршивают параметры.
+	 * @param count количество запрашиваемых записей.
+	 * @param period период хранения данных в устройстве.
+	 * @return параметры запроса архива к устройству
+	 */
 	private RequestParameters createParamsObject(Date date,
 			int count,
 			long period)
@@ -121,12 +143,27 @@ public class AccomulateEnergyExequtor extends AbstractArchiveParameterExequtor
 		return new RequestParameters(date, num, count);
 	}
 
+	/**
+	 * Класс кнтейнер параметров одного запроса к устройству.
+	 *
+	 */
 	private class RequestParameters
 	{
+		/**
+		 * Дата за которую запрашивается значение.
+		 */
 		Date date;
 
+		/**
+		 * Количество периодов от начала суток.
+		 * (Например номер получасовки от начала суток)
+		 */
 		int num;
 
+		/**
+		 * Количество считываемых подряд измерений.
+		 * Не больше 4.
+		 */
 		int count;
 
 		public Date getDate()

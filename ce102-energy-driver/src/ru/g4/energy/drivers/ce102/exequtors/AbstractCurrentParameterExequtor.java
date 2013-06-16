@@ -10,10 +10,20 @@ import ru.g4.energy.drivers.util.par.DriverParameter;
 import ru.g4.protocols.ce102.AccessException;
 import ru.g4.protocols.ce102.facade.Ce102;
 
+/**
+ * Базовый объект исполнитель для запроса текущих параметров.
+ *
+ */
 public abstract class AbstractCurrentParameterExequtor
 {
+	/**
+	 * Код ошибки числовых параметров.
+	 */
 	protected static final int ERROR_CODE = 0xFF;
 	
+	/**
+	 * Запрашиваемый параметр.
+	 */
 	protected DriverParameter parameter;
 	
 	public AbstractCurrentParameterExequtor(DriverParameter parameter)
@@ -21,6 +31,12 @@ public abstract class AbstractCurrentParameterExequtor
 		this.parameter = parameter;
 	}
 	
+	/**
+	 * Исполнитель запроса на запись значения параметра.
+	 * @param facade ссылка на фасад протокола.
+	 * @param request контейнер с параметрами запроса.
+	 * @throws EDriverException ошибка выполнения запроса.
+	 */
 	public void exequteWriteRequest(Ce102 facade, IWriteRequest request) throws EDriverException
 	{
 		try
@@ -42,6 +58,12 @@ public abstract class AbstractCurrentParameterExequtor
 		}
 	}
 
+	/**
+	 * Исполнитель запроса чтения значения параметра.
+	 * @param facade ссылка на фасад протокола.
+	 * @param response обработчик ответа.
+	 * @throws EDriverException ошибка выполнения запроса.
+	 */
 	public void exequteRequest(Ce102 facade, IRegularResponse response) throws EDriverException
 	{
 		try
@@ -63,10 +85,28 @@ public abstract class AbstractCurrentParameterExequtor
 		}
 	}
 
+	/**
+	 * Абстрактный метод реализации запроса на чтение.
+	 * @param facade ссылка на фасад протокола.
+	 * @param response обработчик ответа устройства.
+	 * @throws IOException ошибка канального уровня.
+	 * @throws AccessException ошибка доступа к устройству
+	 * @throws InterruptedException ошибка неожиданного прерывания.
+	 * @throws EParametersException ошибка отправки результата запроса.
+	 */
 	protected abstract void exequteRead(Ce102 facade, IRegularResponse response) throws IOException,
 			AccessException,
 			InterruptedException,EParametersException;
 	
+	/**
+	 * Абстрактный метод реализации запроса на запись.
+	 * @param facade ссылка на фасад протокола.
+	 * @param request контейнер с параметрами запроса.
+	 * @throws IOException ошибка канального уровня.
+	 * @throws AccessException ошибка доступа к устройству
+	 * @throws InterruptedException ошибка неожиданного прерывания.
+	 * @throws EParametersException ошибка отправки результата запроса.
+	 */
 	protected abstract void exequteWrite(Ce102 facade, IWriteRequest request) throws IOException,
 			AccessException,
 			InterruptedException,EParametersException;

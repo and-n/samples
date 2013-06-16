@@ -9,6 +9,10 @@ import ru.g4.energy.drivers.util.par.DriverParameter;
 import ru.g4.protocols.ce102.AccessException;
 import ru.g4.protocols.ce102.facade.Ce102;
 
+/**
+ * Исполнитель запроса суммы энергии по тарифам.
+ *
+ */
 public class TarifSumParamExequtor extends AbstractCurrentParameterExequtor
 {
 

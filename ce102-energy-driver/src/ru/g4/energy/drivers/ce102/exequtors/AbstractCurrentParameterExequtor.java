@@ -2,6 +2,9 @@ package ru.g4.energy.drivers.ce102.exequtors;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ru.g4.energy.drivers.util.exc.EDriverException;
 import ru.g4.energy.drivers.util.exc.EParametersException;
 import ru.g4.energy.drivers.util.msg.IRegularResponse;
@@ -21,6 +24,8 @@ public abstract class AbstractCurrentParameterExequtor
 	 */
 	protected static final int ERROR_CODE = 0xFF;
 	
+	protected Logger log=LoggerFactory.getLogger("CurrentParameterExequtor");
+			
 	/**
 	 * Запрашиваемый параметр.
 	 */

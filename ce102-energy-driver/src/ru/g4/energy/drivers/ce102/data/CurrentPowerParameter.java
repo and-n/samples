@@ -15,4 +15,12 @@ public class CurrentPowerParameter extends AbstractCurrentParameter
 		return new PowerParameterExequtor(this);
 	}
 
+	@Override
+	public String toString()
+	{
+		return "CurrentPowerParameter [getExequtor()=" + getExequtor().getClass()
+				+ ", isWriteable()=" + isWriteable() + ", getNumber()="
+				+ getNumber() + ", getInner()=" + getInner() + "]";
+	}
+
 }

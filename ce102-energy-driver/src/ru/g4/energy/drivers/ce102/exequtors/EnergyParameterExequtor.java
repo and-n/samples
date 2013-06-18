@@ -27,8 +27,10 @@ public class EnergyParameterExequtor extends AbstractTarifParameterExequtor
 			AccessException,
 			InterruptedException, EParametersException
 	{
+		log.debug("Запрашиваем энергию по тарифу "+tarif);
 		double value = facade.getTariffValue(tarif, deep);
-		int quality = value==ERROR_CODE ? 0:192;		
+		int quality = value==ERROR_CODE ? 0:192;
+		log.debug("отправляем значение "+parameter+" value="+value+" quality="+quality);
 		response.sendValue(parameter, value, facade.getDateTime().getTime(), quality);
 	}
 
@@ -40,4 +42,11 @@ public class EnergyParameterExequtor extends AbstractTarifParameterExequtor
 		throw new UnsupportedOperationException();	
 	}
 
+	@Override
+	public String toString()
+	{
+		return "EnergyParameterExequtor [tarif=" + tarif + ", deep=" + deep
+				+ ", parameter=" + parameter + ", getClass()=" + getClass()
+				+ "]";
+	}
 }

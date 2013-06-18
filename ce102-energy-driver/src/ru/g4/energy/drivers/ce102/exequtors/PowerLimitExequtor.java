@@ -11,28 +11,44 @@ import ru.g4.protocols.ce102.facade.Ce102;
 
 /**
  * Исполнитель запросов параметра лимит мощности.
- *
  */
-public class PowerLimitExequtor extends AbstractCurrentParameterExequtor {
+public class PowerLimitExequtor extends AbstractCurrentParameterExequtor
+{
 
-	public PowerLimitExequtor(DriverParameter parameter) {
+	public PowerLimitExequtor(DriverParameter parameter)
+	{
 		super(parameter);
 	}
 
 	@Override
-	protected void exequteRead(Ce102 facade, IRegularResponse response)
-			throws IOException, AccessException, InterruptedException,
-			EParametersException {
-		double value= facade.getPowerLimit();
-		int quality = value==ERROR_CODE ? 0:192;
-		response.sendValue(parameter, value, facade.getDateTime().getTime(), quality);
+	protected void exequteRead(Ce102 facade, IRegularResponse response) throws IOException,
+			AccessException,
+			InterruptedException,
+			EParametersException
+	{
+		log.debug("Запрашиваем лимит мощности");
+		double value = facade.getPowerLimit();
+		int quality = value == ERROR_CODE ? 0 : 192;
+		log.debug("отправляем значение "+parameter+" value="+value+" quality="+quality);
+		response.sendValue(parameter, value, facade.getDateTime().getTime(),
+				quality);
 	}
 
 	@Override
-	protected void exequteWrite(Ce102 facade, IWriteRequest request)
-			throws IOException, AccessException, InterruptedException,
-			EParametersException {
-		facade.setPowerLimit( ((Number)request.value()).doubleValue());
+	protected void exequteWrite(Ce102 facade, IWriteRequest request) throws IOException,
+			AccessException,
+			InterruptedException,
+			EParametersException
+	{
+		log.debug("Устанавливаем лимит мощности request="+request);
+		facade.setPowerLimit(((Number) request.value()).doubleValue());
+	}
+
+	@Override
+	public String toString()
+	{
+		return "PowerLimitExequtor [parameter=" + parameter + ", getClass()="
+				+ getClass() + "]";
 	}
 
 }

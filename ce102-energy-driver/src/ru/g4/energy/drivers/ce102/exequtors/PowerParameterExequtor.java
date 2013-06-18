@@ -25,8 +25,10 @@ public class PowerParameterExequtor extends AbstractCurrentParameterExequtor
 			AccessException,
 			InterruptedException, EParametersException
 	{
+		log.debug("Запрашиваем мощность");
 		double value= facade.getPower();
 		int quality = value==ERROR_CODE ? 0:192;
+		log.debug("отправляем значение "+parameter+" value="+value+" quality="+quality);
 		response.sendValue(parameter, value, facade.getDateTime().getTime(), quality);
 	}
 
@@ -35,7 +37,13 @@ public class PowerParameterExequtor extends AbstractCurrentParameterExequtor
 			throws IOException, AccessException, InterruptedException,
 			EParametersException {
 		throw new UnsupportedOperationException();
-		
+	}
+
+	@Override
+	public String toString()
+	{
+		return "PowerParameterExequtor [parameter=" + parameter
+				+ ", getClass()=" + getClass() + "]";
 	}
 
 }

@@ -13,20 +13,21 @@ import ru.g4.energy.drivers.util.msg.IArchiveRequest;
 import ru.g4.energy.drivers.util.msg.IArchiveResponse;
 import ru.g4.protocols.ce102.AccessException;
 import ru.g4.protocols.ce102.facade.Ce102;
+import ru.g4.utils.log.LoggingUtils;
 
 /**
- * »сполнитель запроса архивного значени€ накопленной энергии. 
- *
+ * »сполнитель запроса архивного значени€ накопленной энергии.
  */
 public class AccomulateEnergyExequtor extends AbstractArchiveParameterExequtor
 {
 
-	public AccomulateEnergyExequtor(AbstractArchiveParameter param) {
+	public AccomulateEnergyExequtor(AbstractArchiveParameter param)
+	{
 		super(param);
 	}
 
 	/**
-	 *  од ошибочного значени€, полученного  с прибора.
+	 *  од ошибочного значени€, полученного с прибора.
 	 */
 	private static final int ERROR_CODE = 0xFF;
 
@@ -40,8 +41,11 @@ public class AccomulateEnergyExequtor extends AbstractArchiveParameterExequtor
 		{
 			throw new EDriverException("Ќеизвестный тип периода архивов");
 		}
+		log.debug("ѕреобразуем параметры запроса архива");
 		List<RequestParameters> list =
 				getRequestParams(request, facade, period);
+		log.debug("—оздали список параметров запроса в терминах се102 \n"
+				+ list);
 		for (RequestParameters requestParams : list)
 		{
 			try
@@ -55,6 +59,8 @@ public class AccomulateEnergyExequtor extends AbstractArchiveParameterExequtor
 					int quality = values[i] == ERROR_CODE ? 0 : 192;
 					long timeStamp =
 							requestParams.getDate().getTime() + period * i;
+					log.info("отправл€ем параметр param=" + param + " val="
+							+ values[i]);
 					response.sendArchive(param, values[i], timeStamp, quality);
 				}
 			}
@@ -75,7 +81,9 @@ public class AccomulateEnergyExequtor extends AbstractArchiveParameterExequtor
 	}
 
 	/**
-	 * ѕреобразует параметры запроса в терминах energy-node в параметры в терминах протокола.
+	 * ѕреобразует параметры запроса в терминах energy-node в параметры в
+	 * терминах протокола.
+	 * 
 	 * @param request контейнер с параметрами запроса архива.
 	 * @param facade ссылка на фасад протокола.
 	 * @param period период хранени€ данных в устройстве.
@@ -123,6 +131,7 @@ public class AccomulateEnergyExequtor extends AbstractArchiveParameterExequtor
 
 	/**
 	 * —оздаЄт контейнер с параметрами дл€ одного запроса к устройству.
+	 * 
 	 * @param date дата за которую запршивают параметры.
 	 * @param count количество запрашиваемых записей.
 	 * @param period период хранени€ данных в устройстве.
@@ -140,12 +149,14 @@ public class AccomulateEnergyExequtor extends AbstractArchiveParameterExequtor
 		dayStart.set(Calendar.MILLISECOND, 0);
 		int num =
 				(int) ((date.getTime() - dayStart.getTimeInMillis()) / period);
+		log.debug("создаЄм RequestParameters date="
+				+ LoggingUtils.getNewStandartFormatter().format(date) + " num="
+				+ num + " count=" + count);
 		return new RequestParameters(date, num, count);
 	}
 
 	/**
 	 *  ласс кнтейнер параметров одного запроса к устройству.
-	 *
 	 */
 	private class RequestParameters
 	{
@@ -155,14 +166,13 @@ public class AccomulateEnergyExequtor extends AbstractArchiveParameterExequtor
 		Date date;
 
 		/**
-		 *  оличество периодов от начала суток.
-		 * (Ќапример номер получасовки от начала суток)
+		 *  оличество периодов от начала суток. (Ќапример номер получасовки от
+		 * начала суток)
 		 */
 		int num;
 
 		/**
-		 *  оличество считываемых подр€д измерений.
-		 * Ќе больше 4.
+		 *  оличество считываемых подр€д измерений. Ќе больше 4.
 		 */
 		int count;
 
@@ -190,4 +200,12 @@ public class AccomulateEnergyExequtor extends AbstractArchiveParameterExequtor
 		}
 
 	}
+
+	@Override
+	public String toString()
+	{
+		return "AccomulateEnergyExequtor [param=" + param + ", getClass()="
+				+ getClass() + "]";
+	}
+
 }

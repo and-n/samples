@@ -13,4 +13,11 @@ public class AccoumulateEnergyParameter extends AbstractArchiveParameter {
 		return new AccomulateEnergyExequtor(this);
 	}
 
+	@Override
+	public String toString()
+	{
+		return "AccoumulateEnergyParameter [getExequtor()=" + getExequtor().getClass()
+				+ ", getNumber()=" + getNumber() + ", getInner()=" + getInner()
+				+ "]";
+	}
 }

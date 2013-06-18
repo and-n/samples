@@ -2,6 +2,7 @@ package ru.g4.energy.drivers.ce102;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +34,12 @@ import ru.g4.protocols.ce102.facade.Ce102;
 import ru.g4.protocols.ce102.facade.Ce102Factory;
 import ru.g4.utils.log.LoggingUtils;
 
+/**
+ * Драйвер для работы с однофазным электросчётчиком СЕ102.
+ * <p>
+ * <b> Date</b>: 17.06.2013 10:12:42
+ * </p>
+ */
 public class CE102Driver extends EnergyDriver
 {
 
@@ -42,8 +49,9 @@ public class CE102Driver extends EnergyDriver
 		IParametersManager parametersManager = initParameters();
 		if (parametersManager == null)
 		{
+			log.info("parametersManager==null");
 			// TODO
-			// throw new
+			throw new Error("Не удалось инициализировать parametersManager");
 		}
 		Map<Integer, IParametersManager> parametersMap =
 				new HashMap<Integer, IParametersManager>();
@@ -51,6 +59,12 @@ public class CE102Driver extends EnergyDriver
 		return parametersMap;
 	}
 
+	/**
+	 * Разбирает конфиг с параметрами устройства, создаёт объект-менеджера для
+	 * доступа к сигналам.
+	 * 
+	 * @return менеджер для доступа к параметрам прибора.
+	 */
 	private CeParametersManager initParameters()
 	{
 		XMLConfigBuilder builder = new XMLConfigBuilder();
@@ -60,12 +74,14 @@ public class CE102Driver extends EnergyDriver
 		builder.addDescriptor(CurrentTarifSumParameter.class);
 		builder.addDescriptor(EnergyForPaymentDateParameter.class);
 		builder.addDescriptor(AccoumulateEnergyParameter.class);
+		builder.addDescriptor(CeParametersManager.class);
 
 		InputStream resIn = CE102Driver.class.getResourceAsStream("config.xml");
 		try
 		{
 			IConfiguration cfg = builder.buildConfiguration(resIn);
-			CeParametersManager[] pm = cfg.getObjectsByType(CeParametersManager.class);
+			CeParametersManager[] pm =
+					cfg.getObjectsByType(CeParametersManager.class);
 			if (pm.length > 0)
 			{
 				return pm[0];
@@ -78,6 +94,7 @@ public class CE102Driver extends EnergyDriver
 		}
 		catch (EBuildConfigurationException e)
 		{
+			System.err.println(LoggingUtils.dumpThrowable(e));
 			e.printStackTrace();
 		}
 		return null;
@@ -97,15 +114,23 @@ public class CE102Driver extends EnergyDriver
 		Ce102 ceFacade =
 				ceFactory.getCE102(request.connectionPort(),
 						request.meterInfo().address,
-						request.meterInfo().password.getBytes());
+						Long.parseLong(request.meterInfo().password));
 		long period = ceFacade.getIntervalLength();
-		if(period==-1){
+		if (period == -1)
+		{
 			throw new EDriverException("Неизвестный тип периода архивов");
 		}
-		AbstractArchiveParameter[] params = filter(request.parameters(), AbstractArchiveParameter.class);
-		for(AbstractArchiveParameter archiveParam : params)
+		AbstractArchiveParameter[] params =
+				filter(request.parameters(), AbstractArchiveParameter.class);
+		log.debug("запрос архивных параметров "+params);
+		if (params != null)
 		{
-			archiveParam.getExequtor().exequte(request, response, ceFacade);
+			log.debug("запрос архивных параметров в количестве "+params.length);
+			for (AbstractArchiveParameter archiveParam : params)
+			{
+				log.debug("Запрашиваем параметр "+archiveParam);
+				archiveParam.getExequtor().exequte(request, response, ceFacade);
+			}
 		}
 		return onMeterTime;
 	}
@@ -124,19 +149,19 @@ public class CE102Driver extends EnergyDriver
 		}
 		catch (IOException e)
 		{
-			log.warning("ошибка канального уровня! \n"
+			log.warn("ошибка канального уровня! \n"
 					+ LoggingUtils.dumpThrowable(e));
 			throw new EDriverException("ошибка канального уровня!", e);
 		}
 		catch (AccessException e)
 		{
-			log.warning("ошибка доступа к устройству! \n"
+			log.warn("ошибка доступа к устройству! \n"
 					+ LoggingUtils.dumpThrowable(e));
 			throw new EDriverException("ошибка доступа к устройству!", e);
 		}
 		catch (InterruptedException e)
 		{
-			log.warning("ошибка! \n" + LoggingUtils.dumpThrowable(e));
+			log.warn("ошибка! \n" + LoggingUtils.dumpThrowable(e));
 			throw new EDriverException("ошибка!", e);
 		}
 	}
@@ -152,7 +177,7 @@ public class CE102Driver extends EnergyDriver
 						request.meterInfo().password.getBytes());
 		AbstractCurrentParameter[] requestParameters =
 				filter(request.parameters(), AbstractCurrentParameter.class);
-		for(AbstractCurrentParameter parameter:requestParameters)
+		for (AbstractCurrentParameter parameter : requestParameters)
 		{
 			AbstractCurrentParameterExequtor exequtor = parameter.getExequtor();
 			exequtor.exequteRequest(ceFacade, response);
@@ -174,19 +199,19 @@ public class CE102Driver extends EnergyDriver
 		}
 		catch (IOException e)
 		{
-			log.warning("ошибка канального уровня! \n"
+			log.warn("ошибка канального уровня! \n"
 					+ LoggingUtils.dumpThrowable(e));
 			throw new EDriverException("ошибка канального уровня!", e);
 		}
 		catch (AccessException e)
 		{
-			log.warning("ошибка доступа к устройству! \n"
+			log.warn("ошибка доступа к устройству! \n"
 					+ LoggingUtils.dumpThrowable(e));
 			throw new EDriverException("ошибка доступа к устройству!", e);
 		}
 		catch (InterruptedException e)
 		{
-			log.warning("ошибка! \n" + LoggingUtils.dumpThrowable(e));
+			log.warn("ошибка! \n" + LoggingUtils.dumpThrowable(e));
 			throw new EDriverException("ошибка!", e);
 		}
 		return onMeterTime(request);
@@ -200,10 +225,11 @@ public class CE102Driver extends EnergyDriver
 				ceFactory.getCE102(request.connectionPort(),
 						request.meterInfo().address,
 						request.meterInfo().password.getBytes());
-		
-		if( request.parameter() instanceof AbstractCurrentParameter)
+
+		if (request.parameter() instanceof AbstractCurrentParameter)
 		{
-			AbstractCurrentParameter parameter=(AbstractCurrentParameter) request.parameter();
+			AbstractCurrentParameter parameter =
+					(AbstractCurrentParameter) request.parameter();
 			AbstractCurrentParameterExequtor exequtor = parameter.getExequtor();
 			exequtor.exequteWriteRequest(ceFacade, request);
 		}

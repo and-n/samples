@@ -13,4 +13,13 @@ public class CurrentTarifSumParameter extends AbstractCurrentParameter
 	{
 		return new TarifSumParamExequtor(this);
 	}
+
+	@Override
+	public String toString()
+	{
+		return "CurrentTarifSumParameter [getExequtor()=" + getExequtor().getClass()
+				+ ", isWriteable()=" + isWriteable() + ", getNumber()="
+				+ getNumber() + ", getInner()=" + getInner() + "]";
+	}
+	
 }

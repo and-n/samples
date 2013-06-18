@@ -14,4 +14,13 @@ public class CurrentPowerLimit extends AbstractCurrentParameter {
 		return new PowerLimitExequtor(this);
 	}
 
+	@Override
+	public String toString()
+	{
+		return "CurrentPowerLimit [getExequtor()=" + getExequtor().getClass()
+				+ ", isWriteable()=" + isWriteable() + ", getNumber()="
+				+ getNumber() + ", getInner()=" + getInner() + "]";
+	}
+	
+	
 }

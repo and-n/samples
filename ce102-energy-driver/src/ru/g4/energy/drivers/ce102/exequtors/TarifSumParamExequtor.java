@@ -11,31 +11,46 @@ import ru.g4.protocols.ce102.facade.Ce102;
 
 /**
  * Исполнитель запроса суммы энергии по тарифам.
- *
  */
 public class TarifSumParamExequtor extends AbstractCurrentParameterExequtor
 {
 
-	public TarifSumParamExequtor(DriverParameter parameter) {
+	public TarifSumParamExequtor(DriverParameter parameter)
+	{
 		super(parameter);
 	}
 
 	@Override
-	protected void exequteRead(Ce102 facade, IRegularResponse response)
-			throws IOException, AccessException, InterruptedException,
-			EParametersException {
+	protected void exequteRead(Ce102 facade, IRegularResponse response) throws IOException,
+			AccessException,
+			InterruptedException,
+			EParametersException
+	{
+		log.debug("Запрашиваем сумму по тарифам");
 		double value = facade.getTariffSumm(0);
-		int quality = value==ERROR_CODE ? 0:192;		
-		response.sendValue(parameter, value, facade.getDateTime().getTime(), quality);
+
+		int quality = value == ERROR_CODE ? 0 : 192;
+		log.debug("отправляем значение " + parameter + " value=" + value
+				+ " quality=" + quality);
+		response.sendValue(parameter, value, facade.getDateTime().getTime(),
+				quality);
 	}
 
 	@Override
-	protected void exequteWrite(Ce102 facade, IWriteRequest request)
-			throws IOException, AccessException, InterruptedException,
-			EParametersException {
-		throw new UnsupportedOperationException();	
-		
+	protected void exequteWrite(Ce102 facade, IWriteRequest request) throws IOException,
+			AccessException,
+			InterruptedException,
+			EParametersException
+	{
+		throw new UnsupportedOperationException();
+
 	}
 
-	
+	@Override
+	public String toString()
+	{
+		return "TarifSumParamExequtor [parameter=" + parameter
+				+ ", getClass()=" + getClass() + "]";
+	}
+
 }

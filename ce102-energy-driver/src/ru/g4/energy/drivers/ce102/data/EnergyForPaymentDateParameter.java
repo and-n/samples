@@ -12,22 +12,33 @@ public class EnergyForPaymentDateParameter extends AbstractCurrentParameter
 	/**
 	 * Номер тарифа, для которого запрашивается энергия.
 	 */
-	private int tarif;
+	private int tarifNumber;
 
-	public int getTarif()
+	
+
+	public int getTarifNumber()
 	{
-		return tarif;
+		return tarifNumber;
 	}
 
-	public void setTarif(int tarif)
+	public void setTarifNumber(int tarifNumber)
 	{
-		this.tarif = tarif;
+		this.tarifNumber = tarifNumber;
 	}
 
 	@Override
 	public AbstractCurrentParameterExequtor getExequtor()
 	{
-		return new EnergyParameterExequtor(this,tarif, 1);
+		return new EnergyParameterExequtor(this,tarifNumber, 1);
 	}
 
+	@Override
+	public String toString()
+	{
+		return "EnergyForPaymentDateParameter [tarif=" + tarifNumber
+				+ ", getExequtor()=" + getExequtor().getClass() + ", isWriteable()="
+				+ isWriteable() + ", getNumber()=" + getNumber()
+				+ ", getInner()=" + getInner() + "]";
+	}
+	
 }

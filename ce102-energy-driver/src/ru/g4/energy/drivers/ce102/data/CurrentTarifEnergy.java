@@ -27,5 +27,14 @@ public class CurrentTarifEnergy extends AbstractCurrentParameter {
 		return new EnergyParameterExequtor(this, tarifNumber,0);
 	}
 
+	@Override
+	public String toString()
+	{
+		return "CurrentTarifEnergy [tarifNumber=" + tarifNumber
+				+ ", getExequtor()=" + getExequtor().getClass() + ", isWriteable()="
+				+ isWriteable() + ", getNumber()=" + getNumber()
+				+ ", getInner()=" + getInner() + "]";
+	}
+
 
 }

@@ -13,10 +13,10 @@ public class PALInputStreamTest {
 
 	@Test
 	public void testReadRequest() throws IOException {
-		byte[] input = new byte[] {0x31, 0x32, 0x33, 0x34, (byte)0xD3, 0x01, 0x20, (byte)0xFF, (byte)0xFF, (byte)0xFF};
+		byte[] input = new byte[] {0x1, 0x1, 0x0, 0x0, (byte)0xD3, 0x01, 0x20, (byte)0xFF, (byte)0xFF, (byte)0xFF};
 		ByteArrayInputStream bin = new ByteArrayInputStream(input);
 		PALInputStream pin = new PALInputStream(bin);
-		PALRequest expected = new PALRequest(Passw.fromString("1234"),
+		PALRequest expected = new PALRequest(257,
 				ClassAccessEnum.Request, CommandEnum.ReadDateTime,
 				ByteBuffer.wrap(new byte[] {-1, -1, -1}));
 		PALRequest actual = pin.readRequest();
@@ -56,11 +56,11 @@ public class PALInputStreamTest {
 
 	@Test
 	public void testReadPassw() throws IOException {
-		byte[] input = new byte[] {(byte)'1',(byte)'2',(byte)'3',(byte)'4'};
+		byte[] input = new byte[] {1, 1, 0, 0};
 		ByteArrayInputStream bin = new ByteArrayInputStream(input);
 		PALInputStream pin = new PALInputStream(bin);
-		Passw expected = Passw.fromString("1234");
-		Passw actual = pin.readPassw();
+		long expected = 257l;
+		long actual = pin.readPassw();
 		System.out.println(HEXUtils.toString(input)+" => "+actual);
 		Assert.assertEquals(expected, actual);
 		pin.close();

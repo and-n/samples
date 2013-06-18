@@ -26,7 +26,6 @@ import ru.g4.protocols.ce102.PALInputStream;
 import ru.g4.protocols.ce102.PALOutputStream;
 import ru.g4.protocols.ce102.PALRequest;
 import ru.g4.protocols.ce102.PALResponse;
-import ru.g4.protocols.ce102.Passw;
 import ru.g4.protocols.ce102.Serv;
 import ru.g4.utils.HEXUtils;
 
@@ -35,12 +34,12 @@ public class Ce102Impl implements Ce102 {
     private final ChannelParameters<?> params;
     private final int address;
     private long timeout = 1000;
-    private final byte[] password;
+    private final long password;
     private final TimeZone tz;
 
     private long config = -1;
 
-    public Ce102Impl(ChannelParameters<?> params, int address, byte[] passw,
+    public Ce102Impl(ChannelParameters<?> params, int address, long passw,
 	    TimeZone tz) {
 	this.params = params;
 	this.address = address;
@@ -48,7 +47,7 @@ public class Ce102Impl implements Ce102 {
 	this.tz = tz;
     }
 
-    public Ce102Impl(ChannelParameters<?> params, int address, byte[] passw,
+    public Ce102Impl(ChannelParameters<?> params, int address, long passw,
 	    TimeZone tz, long timeout) {
 	if (params == null)
 	    throw new NullPointerException("channel params is null");
@@ -237,7 +236,7 @@ public class Ce102Impl implements Ce102 {
 	    ch.open();
 	    if (!ch.waitConnection(getTimeout()))
 		throw new ENotConnectedException();
-	    PALRequest req = new PALRequest(Passw.fromByte(password),
+	    PALRequest req = new PALRequest(password,
 		    ClassAccessEnum.Request, cmd, ByteBuffer.wrap(data));
 	    PALResponse resp = sendAndWait(req, ch);
 	    throwAccess(resp.getServ());

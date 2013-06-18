@@ -24,12 +24,12 @@ public class PALOutputStreamTest {
 
 	@Test
 	public void testWritePALRequest() throws IOException {
-		PALRequest req = new PALRequest(Passw.fromString("1234"),
+		PALRequest req = new PALRequest(257,
 				ClassAccessEnum.Request, CommandEnum.ReadDateTime,
 				ByteBuffer.wrap(new byte[] {-1, -1, -1}));
 		pout.writePALRequest(req);
 		System.out.println(req+" => "+HEXUtils.toString(bout.toByteArray()));
-		byte[] expect = new byte[] {0x31, 0x32, 0x33, 0x34, (byte)0xD3, 0x01, 0x20, (byte)0xFF, (byte)0xFF, (byte)0xFF};
+		byte[] expect = new byte[] {0x1, 0x1, 0x0, 0x0, (byte)0xD3, 0x01, 0x20, (byte)0xFF, (byte)0xFF, (byte)0xFF};
 		Assert.assertTrue(Arrays.equals(expect, bout.toByteArray()));
 	}
 
@@ -56,10 +56,10 @@ public class PALOutputStreamTest {
 	@Test
 	public void testWritePassw() throws IOException
 	{
-		Passw p = Passw.fromString("1234");
-		pout.writePassw(p);
-		System.out.println(p+" => "+HEXUtils.toString(bout.toByteArray()));
-		Assert.assertTrue(Arrays.equals(bout.toByteArray(), new byte[] {(byte)'1',(byte)'2',(byte)'3',(byte)'4'}));
+		int pasw = 257;
+		pout.writePassw(257);
+		System.out.println(pasw+" => "+HEXUtils.toString(bout.toByteArray()));
+		Assert.assertTrue(Arrays.equals(bout.toByteArray(), new byte[] {1, 1, 0, 0}));
 	}
 	
 	@Test

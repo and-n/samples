@@ -7,22 +7,22 @@ import ru.g4.utils.HEXUtils;
 public class PALRequest extends PALFrame implements Serializable {
 
 	private static final long serialVersionUID = 7553151441336311732L;
-	private Passw passw = new Passw();
+	private long passw = 0;
 
 	public PALRequest() {
 	}
 
-	public PALRequest(Passw passw, ClassAccessEnum access, CommandEnum command,
+	public PALRequest(long passw, ClassAccessEnum access, CommandEnum command,
 			ByteBuffer data) {
 		super(new Serv(Serv.DIRECTION_REQ, access, data.array().length), command, data);
 		this.passw = passw;
 	}
 
-	public Passw getPassw() {
+	public long getPassw() {
 		return passw;
 	}
 
-	public void setPassw(Passw passw) {
+	public void setPassw(long passw) {
 		this.passw = passw;
 	}
 
@@ -30,7 +30,7 @@ public class PALRequest extends PALFrame implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((passw == null) ? 0 : passw.hashCode());
+		result = prime * result + new Long(passw).hashCode();
 		return result;
 	}
 
@@ -43,10 +43,7 @@ public class PALRequest extends PALFrame implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		PALRequest other = (PALRequest) obj;
-		if (passw == null) {
-			if (other.passw != null)
-				return false;
-		} else if (!passw.equals(other.passw))
+		if (passw != other.passw)
 			return false;
 		return true;
 	}

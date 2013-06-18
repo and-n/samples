@@ -45,7 +45,7 @@ public class Ce102ImplTest {
     @Before
     public void setUp() throws Exception {
 	ce = new Ce102Impl(new TCPClientParameters("192.168.127.254", 4001),
-		2575, new byte[] { 0, 0, 0, 0 }, TimeZone.getDefault(), 100);
+		2575, 0, TimeZone.getDefault(), 100);
     }
 
     @Test

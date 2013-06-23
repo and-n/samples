@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:m="http://ant.apache.org/ivy/maven" xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+	<info organisation="rtec.commons" module="g4-utils" revision="1.0" status="integration" publication="20130531182316"/>
+
+	<configurations>
+		<conf name="default" visibility="public" description="включает runtime-зависимости и основную jar из конфигурации master" extends="runtime,master"/>
+		<conf name="master" visibility="public" description="включает в себя jar модуля без зависимостей"/>
+		<conf name="compile" visibility="public" description="конфигурация по умолчанию. Включает все библиотеки необходимые для компиляции (javac -classpath)"/>
+		<conf name="runtime" visibility="public" description="конфигурация описывает библиотеки времени выполнения." extends="compile"/>
+		<conf name="test" visibility="private" description="библиотеки, не нужные для обычного использования, только для тестов" extends="runtime"/>
+		<conf name="sources" visibility="public" description="артефакты с исходным кодом модуля, если таковые имеются"/>
+		<conf name="javadoc" visibility="public" description="артефакты с явадоком модуля, если таковые имеются"/>
+		<conf name="zip" visibility="public" description="zip сборки проекта"/>
+		<conf name="props" visibility="public" description="свойства проекта (.properties)"/>
+	</configurations>
+
+	<publications>
+		<artifact ext="jar" type="jar" conf="master"/>
+		<artifact ext="jar" type="javadoc" m:classifier="javadoc" conf="javadoc"/>
+		<artifact ext="jar" type="source" m:classifier="sources" conf="sources"/>
+		<artifact ext="jar" type="test" m:classifier="tests" conf="test"/>
+		<artifact ext="properties" type="prop" conf="props"/>
+		<artifact ext="zip" type="zip" conf="zip"/>
+	</publications>
+</ivy-module>
